@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Login from "../views/LoginView";
 import Register from "../views/RegisterView";
+import VerifyEmail from "../views/VerifyEmail";
 
 const routes = [
   {
@@ -16,6 +17,11 @@ const routes = [
         path: "/register",
         name: "register",
         component: Register,
+      },
+      {
+        path: "/verificar-email",
+        name: "verifyEmail",
+        component: VerifyEmail,
       },
     ],
   },
