@@ -3,11 +3,6 @@
     <div
       class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0"
     >
-      <a
-        href="#"
-        class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
-      >
-      </a>
       <div
         class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700"
       >
@@ -22,7 +17,7 @@
               {{ response.message }}
             </h3>
           </div>
-          <form class="space-y-4 md:space-y-6" id="loginForm">
+          <form class="space-y-4 md:space-y-6" action="#">
             <div>
               <label
                 for="email"
@@ -32,7 +27,6 @@
               <input
                 v-model="email"
                 type="email"
-                name="email"
                 id="email"
                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="usuario@gmail.com"
@@ -43,33 +37,25 @@
               <label
                 for="password"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >Senha</label
+                >Nova Senha</label
               >
               <input
-                v-model="password"
+                v-model="newPassword"
                 type="password"
-                name="password"
-                id="password"
+                id="newPassword"
                 placeholder="••••••••"
                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required=""
               />
             </div>
-            <div class="flex items-center justify-between">
-              <router-link
-                :to="{ name: 'ForgotPassword' }"
-                class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
-                >Esqueceu a senha?</router-link
-              >
-            </div>
             <button
-              :disabled="spinner.login"
-              @click.stop.prevent="login"
+              :disabled="spinner.resetPassword"
+              @click.stop.prevent="resetPassword"
               type="button"
               class="flex items-center justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 inline-flex items-center"
             >
               <svg
-                v-if="spinner.login"
+                v-if="spinner.resetPassword"
                 aria-hidden="true"
                 role="status"
                 class="inline w-4 h-4 mr-3 text-white animate-spin"
@@ -86,15 +72,17 @@
                   fill="currentColor"
                 />
               </svg>
-              <div v-if="spinner.login" class="login">Loading...</div>
-              <div v-else class="login">Entrar</div>
+              <div v-if="spinner.resetPassword" class="resetPassword">
+                Loading...
+              </div>
+              <div v-else class="resetPassword">Alterar senha</div>
             </button>
             <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-              Não tem uma conta?
+              Já tem uma conta?
               <router-link
-                to="/register"
+                to="/login"
                 class="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                >Cadastre-se</router-link
+                >Login</router-link
               >
             </p>
           </form>
@@ -105,47 +93,57 @@
 </template>
 
 <script>
-import Cookie from "@/service/cookie";
 import { $axios, config } from "@/assets/plugins/axios";
 import message from "@/utils/messages";
 
 export default {
-  name: "Login",
+  name: "Register",
 
   data() {
     return {
       email: "",
-      password: "",
+      newPassword: "",
+      token: "",
       response: {
         color: "",
         message: "",
       },
       spinner: {
-        login: false,
+        resetPassword: false,
       },
     };
   },
 
+  beforeRouteEnter(to, from, next) {
+    if (!to?.query?.token) {
+      next({ name: "login" });
+    }
+
+    next();
+  },
+
+  created() {
+    this.token = this.$route?.query?.token ?? "";
+  },
+
   methods: {
-    login() {
+    resetPassword() {
       const payload = {
         email: this.email,
-        password: this.password,
+        password: this.newPassword,
+        token: this.token,
       };
+
+      this.spinner.resetPassword = true;
 
       this.resetResponse();
 
-      this.spinner.login = true;
-
       $axios
-        .post("v1/login", payload, config)
-        .then((response) => {
-          const token = `${response.data.token_type} ${response.data.access_token}`;
-          console.log(response);
-          Cookie.setToken(token);
-
-          this.$store.commit("user/STORE_USER", response.data.data);
-          this.$router.push({ name: "index" });
+        .post("/v1/reset-password", payload, config)
+        .then(() => {
+          this.resetForm();
+          this.response.color = "green";
+          this.response.message = "Senha alterada com sucesso!";
         })
         .catch((e) => {
           const errorCode = e?.response?.data?.error ?? "ServerError";
@@ -153,7 +151,7 @@ export default {
           this.response.message = message[errorCode];
         })
         .finally(() => {
-          this.spinner.login = false;
+          this.spinner.resetPassword = false;
         });
     },
 
@@ -161,12 +159,18 @@ export default {
       this.response.color = "";
       this.response.message = "";
     },
+
+    resetForm() {
+      this.email = "";
+      this.password = "";
+      this.token = "";
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.login {
+.register {
   width: 200px;
 }
 </style>

@@ -1,13 +1,18 @@
 <template>
-  <header></header>
-  <main class="default">
-    <router-view />
-  </main>
+  <TheHeader></TheHeader>
+  <div class="px-3 py-10 md:px-10">
+    <RouterView />
+  </div>
 </template>
 
 <script>
+import TheHeader from "@/components/partials/TheHeader";
 export default {
   name: "Default",
+
+  components: {
+    TheHeader,
+  },
 };
 </script>
 
