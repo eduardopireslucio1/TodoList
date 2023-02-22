@@ -7,6 +7,7 @@ import VerifyEmail from "../views/VerifyEmail";
 import ForgotPassword from "../views/ForgotPassword";
 import ResetPassword from "../views/ResetPassword";
 import Home from "../views/Home";
+import TodoTasks from "../views/TodoTasks";
 import Guard from "../service/middleware";
 
 const routes = [
@@ -19,6 +20,11 @@ const routes = [
         path: "",
         name: "index",
         component: Home,
+      },
+      {
+        path: "todo/:id",
+        name: "todo-tasks",
+        component: TodoTasks,
       },
     ],
   },
