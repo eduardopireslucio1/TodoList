@@ -63,9 +63,8 @@ export default {
       $axios
         .put(`v1/todos/${this.todo.id}`, payload, config)
         .then(() => {
-          //this.todo.label = this.localLabel;
           this.home.updateTodoLocal(this.todo, this.localLabel);
-          this.onCalcel();
+          this.onCancel();
         })
         .finally(() => {});
     },

@@ -2,7 +2,7 @@
   <div class="w-full sm:w-1/w lg:w-1/3 mx-auto">
     <div class="flex items-center justify-between mb-8">
       <div class="text-gray-500 font-medium">
-        <h5>Lista de tarefas</h5>
+        <br />
         <p>Lista de tarefas</p>
       </div>
     </div>
