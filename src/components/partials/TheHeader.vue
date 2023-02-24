@@ -9,8 +9,8 @@
           href="#"
         >
           <span class="text-2xl pl-2"
-            ><i class="em em-grinning"></i> BI - Net v1.0</span
-          >
+            ><i class="em em-grinning"></i> TodoList - Ultimate Edition
+          </span>
         </a>
       </div>
 
@@ -33,36 +33,7 @@
       <div
         class="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden lg:block pt-6 lg:pt-0"
         id="nav-content"
-      >
-        <ul class="list-reset lg:flex justify-end flex-1 items-center">
-          <li class="mr-3">
-            <a class="inline-block py-2 px-4 text-white no-underline" href="#"
-              >Active</a
-            >
-          </li>
-          <li class="mr-3">
-            <a
-              class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:text-underline py-2 px-4"
-              href="#"
-              >link</a
-            >
-          </li>
-          <li class="mr-3">
-            <a
-              class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:text-underline py-2 px-4"
-              href="#"
-              >link</a
-            >
-          </li>
-          <li class="mr-3">
-            <a
-              class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:text-underline py-2 px-4"
-              href="#"
-              >link</a
-            >
-          </li>
-        </ul>
-      </div>
+      ></div>
     </nav>
   </div>
 </template>
