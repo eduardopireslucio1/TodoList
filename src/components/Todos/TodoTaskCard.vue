@@ -109,7 +109,13 @@ export default {
     }, 600),
 
     deleteTask() {
-      $axios.delete(`v1/todo-tasks/${this.taskCopy.id}`, config);
+      $axios.delete(`v1/todo-tasks/${this.taskCopy.id}`, config).then(() => {
+        this.afterDelete();
+      });
+    },
+
+    afterDelete() {
+      this.$emit("afterDelete", this.taskCopy);
     },
   },
 };

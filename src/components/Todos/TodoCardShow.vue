@@ -2,9 +2,12 @@
   <div
     class="flex items-center justify-between bg-gray-400 rounded-sm px-5 h-10 mb-15"
   >
-    <div class="text-gray-700 font-light truncate">
+    <router-link
+      :to="{ name: 'todo-tasks', params: { id: todo.id } }"
+      class="text-gray-700 font-light truncate"
+    >
       {{ todo.label }}
-    </div>
+    </router-link>
     <div class="flex items-center justify-center">
       <Dropdown naked no-icon no-padding isOptions>
         <DropdownItem @click="onUpdate()">

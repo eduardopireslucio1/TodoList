@@ -61,7 +61,12 @@
       </form>
 
       <div v-if="todo.tasks.length" class="bg-gray-300 rounded-sm">
-        <TodoTaskCard v-for="task in todo.tasks" :key="task.id" :task="task" />
+        <TodoTaskCard
+          v-for="task in todo.tasks"
+          :key="task.id"
+          :task="task"
+          @afterDelete="afterDelete"
+        />
       </div>
       <div v-else class="text-center text-lg text-gray-600">
         Não há nenhuma tarefa.
@@ -98,7 +103,6 @@ export default {
       $axios
         .get(`v1/todos/${this.$route.params.id}`, config)
         .then((response) => {
-          console.log(response.data.data);
           this.todo = response.data.data;
         })
         .finally(() => {
@@ -122,6 +126,11 @@ export default {
           this.newTask = "";
         })
         .finally(() => {});
+    },
+
+    afterDelete(task) {
+      const idx = this.todo.tasks.findIndex((o) => o.id === task.id);
+      this.todo.tasks.splice(idx, 1);
     },
   },
 };
